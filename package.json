@@ -1,0 +1,32 @@
+{
+  "name": "wow_companion_tool",
+  "version": "0.1.0",
+  "description": "Tool for WoW Companion application",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rimraf dist",
+    "start": "node dist/index.js",
+    "restart": "npm run build && npm run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbwittner/wow_companion_tool.git"
+  },
+  "author": "Jean-Baptiste WITTNER",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jbwittner/wow_companion_tool/issues"
+  },
+  "homepage": "https://github.com/jbwittner/wow_companion_tool#readme",
+  "dependencies": {
+    "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios": "^0.7.0",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.17.0"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "tslint": "^6.1.3",
+    "typescript": "^4.6.3"
+  }
+}
