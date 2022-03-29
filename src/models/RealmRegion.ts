@@ -1,6 +1,6 @@
 import { initLocalizedData, LocalizedData } from "./LocalizedType";
 import { DataTypes } from "sequelize";
-import { sequelizeInstance } from "../config/sequelize"
+import { sequelizeInstance } from "../config/SequelizeConfig"
 
 export class RealmRegion extends LocalizedData{
     declare id: number

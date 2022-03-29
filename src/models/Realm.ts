@@ -1,6 +1,6 @@
 import { initLocalizedData, LocalizedData } from "./LocalizedType";
 import { DataTypes } from "sequelize";
-import { sequelizeInstance } from "../config/sequelize"
+import { sequelizeInstance } from "../config/SequelizeConfig"
 import { RealmRegion } from "./RealmRegion";
 import { RealmCategory } from "./RealmCategory";
 import { RealmType } from "./RealmType";

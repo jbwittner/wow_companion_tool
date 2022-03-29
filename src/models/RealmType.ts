@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import { sequelizeInstance } from "../config/sequelize"
+import { sequelizeInstance } from "../config/SequelizeConfig"
 
 export class RealmType extends Model {
     declare id: number
@@ -9,6 +9,7 @@ export class RealmType extends Model {
 RealmType.init({
     id: {
         type: DataTypes.INTEGER,
+        autoIncrement: true,
         primaryKey: true
       },
     type: DataTypes.STRING

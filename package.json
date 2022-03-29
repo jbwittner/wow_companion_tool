@@ -21,7 +21,9 @@
   "homepage": "https://github.com/jbwittner/wow_companion_tool#readme",
   "dependencies": {
     "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios": "^0.7.0",
+    "axios": "^0.26.1",
     "mysql2": "^2.3.3",
+    "query-string": "^7.1.1",
     "sequelize": "^6.17.0"
   },
   "devDependencies": {
