@@ -2,14 +2,16 @@ import { initLocalizedData, LocalizedData } from "./LocalizedType";
 import { DataTypes } from "sequelize";
 import { sequelizeInstance } from "../config/SequelizeConfig"
 
-export class RealmRegion extends LocalizedData{
+export class Faction extends LocalizedData{
     declare id: number
+    declare type: string
 }
 
-RealmRegion.init({
+Faction.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true
       },
+      type: DataTypes.STRING,
     ...initLocalizedData
-  }, { sequelize: sequelizeInstance, tableName: 'REALM_REGION', timestamps: false});
+  }, { sequelize: sequelizeInstance, tableName: 'FACTIONS', timestamps: false});
