@@ -1,4 +1,4 @@
-import { Configuration, PlayableRaceApi, PlayableRaceData, PlayableSpecializationApi, PlayableSpecializationApiFp, PlayableSpecializationApiInterface, RealmApi, RealmData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
+import { Configuration, NameObjectData, PlayableRaceApi, PlayableRaceData, PlayableSpecializationApi, PlayableSpecializationApiFp, PlayableSpecializationApiInterface, RealmApi, RealmData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
 import { Faction } from "../models/Faction";
 import { PlayableRace } from "../models/PlayableRace";
 import { getName } from "../updateStaticData";
@@ -78,7 +78,7 @@ const createOrUpdateFaction = async (playableRaceData: PlayableRaceData) => {
         }
     })
 
-    Object.assign(faction, getName(factionData.name))
+    Object.assign(faction, getName(<NameObjectData> factionData.name))
 
     await faction.save()
 
@@ -99,7 +99,7 @@ const createOrUpdatePlayableRace = async (playableRaceData: PlayableRaceData, fa
 
     playableRace.faction_id = faction.id
 
-    Object.assign(playableRace, getName(playableRaceData.name))
+    Object.assign(playableRace, getName(<NameObjectData> playableRaceData.name))
 
     await playableRace.save()
 

@@ -1,4 +1,4 @@
-import { Configuration, PlayableClassApi, PlayableClassData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
+import { Configuration, NameObjectData, PlayableClassApi, PlayableClassData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
 import { PlayableClass } from "../models/PlayableClass";
 import { getName } from "../updateStaticData";
 
@@ -87,7 +87,7 @@ const createOrUpdatePlayableClass = async (playableClassData: PlayableClassData,
 
     playableClass.media_url = mediaData.assets[0].value
 
-    Object.assign(playableClass, getName(playableClassData.name))
+    Object.assign(playableClass, getName(<NameObjectData> playableClassData.name))
 
     await playableClass.save()
 

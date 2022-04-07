@@ -1,4 +1,4 @@
-import { Configuration, PlayableSpecializationApi, PlayableSpecializationData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
+import { Configuration, NameObjectData, PlayableSpecializationApi, PlayableSpecializationData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
 import { PlayableClass } from "../models/PlayableClass";
 import { PlayableSpecialization } from "../models/PlayableSpecialization";
 import { SpecializationRole } from "../models/SpecializationRole";
@@ -91,7 +91,7 @@ const createOrUpdateSpecilizationRole = async (playableSpecializationData: Playa
         }
     })
 
-    Object.assign(specializationRole, getName(specializationRoleData.name))
+    Object.assign(specializationRole, getName(<NameObjectData> specializationRoleData.name))
 
     await specializationRole.save()
 
@@ -130,7 +130,7 @@ const createOrUpdatePlayableSpecialization = async (playableSpecializationData: 
     playableSpecialization.specialization_role_id = specializationRole.id,
     playableSpecialization.playable_class_id = playableClass.id
 
-    Object.assign(playableSpecialization, getName(playableSpecializationData.name))
+    Object.assign(playableSpecialization, getName(<NameObjectData> playableSpecializationData.name))
 
     await playableSpecialization.save()
 

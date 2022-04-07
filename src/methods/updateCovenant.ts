@@ -1,4 +1,4 @@
-import { Configuration, CovenantApi, IndexData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
+import { Configuration, CovenantApi, IndexData, NameObjectData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
 import { getName } from "../updateStaticData";
 import { Covenant } from "../models/Covenant";
 
@@ -71,7 +71,7 @@ const createOrUpdateCovenant = async (covenantData: IndexData, covenantApi: Cove
 
     covenant.media_url = mediaData[0].value
 
-    Object.assign(covenant, getName(covenantData.name))
+    Object.assign(covenant, getName(<NameObjectData> covenantData.name))
 
     await covenant.save()
 

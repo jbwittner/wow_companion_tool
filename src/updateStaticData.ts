@@ -1,4 +1,4 @@
-import { Configuration, NameData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
+import { Configuration, NameObjectData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
 import axios from "axios";
 import * as qs from 'query-string'
 import { updateCovenant } from "./methods/updateCovenant";
@@ -7,7 +7,7 @@ import { updatePlayableRace } from "./methods/updatePlayableRace";
 import { updatePlayableSpecialization } from "./methods/updatePlayableSpecialization";
 import { updateRealms } from "./methods/updateRealm";
 
-export const getName = (data: NameData) => {
+export const getName = (data: NameObjectData) => {
     return {
         de_de: data.de_DE,
         en_gb: data.en_GB,

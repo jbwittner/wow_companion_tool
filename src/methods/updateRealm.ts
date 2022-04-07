@@ -1,4 +1,4 @@
-import { Configuration, RealmApi, RealmData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
+import { Configuration, NameObjectData, RealmApi, RealmData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
 import { Realm } from "../models/Realm";
 import { RealmCategory } from "../models/RealmCategory";
 import { RealmType } from "../models/RealmType";
@@ -81,7 +81,7 @@ const createOrUpdateRealmType = async (realmData: RealmData) => {
         }
     })
 
-    Object.assign(realmType, getName(typeData.name))
+    Object.assign(realmType, getName(<NameObjectData> typeData.name))
 
     await realmType.save()
 
@@ -91,7 +91,7 @@ const createOrUpdateRealmType = async (realmData: RealmData) => {
 
 const createOrUpdateRealmCategory = async (realmData: RealmData) => {
 
-    const categoryData = realmData.category;
+    const categoryData = <NameObjectData> realmData.category;
 
     const count = await RealmCategory.findAndCountAll()
 
@@ -104,7 +104,7 @@ const createOrUpdateRealmCategory = async (realmData: RealmData) => {
         }
     })
 
-    Object.assign(realmCategory, getName(categoryData))
+    Object.assign(realmCategory, getName(<NameObjectData> categoryData))
 
     await realmCategory.save()
 
@@ -133,7 +133,7 @@ const createOrUpdateRealm = async (realmData: RealmData, realmCategory: RealmCat
     realm.timezone = realmData.timezone
     realm.slug = realmData.slug
 
-    Object.assign(realm, getName(realmData.name))
+    Object.assign(realm, getName(<NameObjectData> realmData.name))
 
     await realm.save()
 
