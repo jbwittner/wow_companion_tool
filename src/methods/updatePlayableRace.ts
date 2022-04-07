@@ -1,5 +1,6 @@
 import { Configuration, PlayableRaceApi, PlayableRaceData, PlayableSpecializationApi, PlayableSpecializationApiFp, PlayableSpecializationApiInterface, RealmApi, RealmData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
 import { Faction } from "../models/Faction";
+import { PlayableRace } from "../models/PlayableRace";
 import { getName } from "../updateStaticData";
 
 export const updatePlayableRace = async (configuration:Configuration) => {
@@ -32,7 +33,8 @@ export const updatePlayableRace = async (configuration:Configuration) => {
     console.log("PLAYABLE_RACE : Start save data")
 
     for(const playableRaceData of playableRaceDataArray){
-        await createOrUpdatePlayableRace(playableRaceData)
+        const faction = await createOrUpdateFaction(playableRaceData)
+        await createOrUpdatePlayableRace(playableRaceData, faction)
     }
 
     console.timeEnd("PLAYABLE_RACE")
@@ -61,7 +63,7 @@ const getPlayableRaceIndex = async (playableRaceApi: PlayableRaceApi) => {
     }
 }
 
-const createOrUpdatePlayableRace = async (playableRaceData: PlayableRaceData) => {
+const createOrUpdateFaction = async (playableRaceData: PlayableRaceData) => {
 
     const factionData = playableRaceData.faction;
 
@@ -81,5 +83,28 @@ const createOrUpdatePlayableRace = async (playableRaceData: PlayableRaceData) =>
     await faction.save()
 
     return faction
+
+}
+
+const createOrUpdatePlayableRace = async (playableRaceData: PlayableRaceData, faction: Faction) => {
+
+    const count = await Faction.findAndCountAll()
+
+    const [playableRace] = await PlayableRace.findOrCreate({
+        where : {
+            id: playableRaceData.id
+        },
+        defaults: {
+            faction_id: faction.id
+        }
+    })
+
+    playableRace.faction_id = faction.id
+
+    Object.assign(playableRace, getName(playableRaceData.name))
+
+    await playableRace.save()
+
+    return playableRace
 
 }
