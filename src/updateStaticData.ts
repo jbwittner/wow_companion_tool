@@ -1,8 +1,11 @@
 import { Configuration, NameData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
 import axios from "axios";
 import * as qs from 'query-string'
-import { updatePlayableRace } from "./updatePlayableRace";
-import { updateRealms } from "./updateRealm";
+import { updateCovenant } from "./methods/updateCovenant";
+import { updatePlayableClass } from "./methods/updatePlayableClass";
+import { updatePlayableRace } from "./methods/updatePlayableRace";
+import { updatePlayableSpecialization } from "./methods/updatePlayableSpecialization";
+import { updateRealms } from "./methods/updateRealm";
 
 export const getName = (data: NameData) => {
     return {
@@ -46,8 +49,13 @@ async function updateDate() {
         }
     });
 
-    //await updateRealms(configuration)
-    //await updatePlayableRace(configuration)
+    updateRealms(configuration)
+    updatePlayableRace(configuration)
+    updatePlayableClass(configuration).then(() => {
+        updatePlayableSpecialization(configuration)
+    })
+    updatePlayableSpecialization(configuration)
+    updateCovenant(configuration)
 }
 
 updateDate().then(() => {

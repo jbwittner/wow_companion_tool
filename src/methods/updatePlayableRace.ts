@@ -1,13 +1,9 @@
-import { Configuration, PlayableRaceApi, PlayableRaceData, RealmApi, RealmData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
-import { getName } from ".";
-import { Faction } from "./models/Faction";
-import { PlayableRace } from "./models/PlayableRace";
-import { Realm } from "./models/Realm";
-import { RealmCategory } from "./models/RealmCategory";
-import { RealmType } from "./models/RealmType";
+import { Configuration, PlayableRaceApi, PlayableRaceData, PlayableSpecializationApi, PlayableSpecializationApiFp, PlayableSpecializationApiInterface, RealmApi, RealmData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
+import { Faction } from "../models/Faction";
+import { getName } from "../updateStaticData";
 
 export const updatePlayableRace = async (configuration:Configuration) => {
-    console.log("PLAYABLE_RACE : Start update playable races")
+    console.log("PLAYABLE_RACE : Start update")
 
     const playableRaceApi : PlayableRaceApi = new PlayableRaceApi(configuration);
 
@@ -35,11 +31,10 @@ export const updatePlayableRace = async (configuration:Configuration) => {
     console.log("PLAYABLE_RACE : Start save data")
 
     for(const playableRaceData of playableRaceDataArray){
-        const faction = await createOrUpdateFaction(playableRaceData)
-        await createOrUpdateRace(playableRaceData, faction)
+        await createOrUpdatePlayableRace(playableRaceData)
     }
 
-    console.log("REALMS : End save data")
+    console.log("PLAYABLE_RACE : End save data")
 }
 
 const getPlayableRaceData = async (id: number, playableRaceApi: PlayableRaceApi) => {
@@ -53,13 +48,13 @@ const getPlayableRaceData = async (id: number, playableRaceApi: PlayableRaceApi)
     }
 }
 
-const createOrUpdateFaction = async (playableRaceData: PlayableRaceData) => {
+const createOrUpdatePlayableRace = async (playableRaceData: PlayableRaceData) => {
 
     const factionData = playableRaceData.faction;
 
     const count = await Faction.findAndCountAll()
 
-    const result = await Faction.findOrCreate({
+    const [faction] = await Faction.findOrCreate({
         where : {
             type: factionData.type
         },
@@ -68,34 +63,10 @@ const createOrUpdateFaction = async (playableRaceData: PlayableRaceData) => {
         }
     })
 
-    const faction = result[0]
-
     Object.assign(faction, getName(factionData.name))
 
     await faction.save()
 
     return faction
 
-}
-
-const createOrUpdateRace = async (playableRaceData: PlayableRaceData, faction: Faction) => {
-    
-    const result = await PlayableRace.findOrCreate({
-        where : {
-            id: playableRaceData.id
-        },
-        defaults: {
-            faction_id: faction.id
-        }
-    })
-
-    const playableRace = result[0]
-
-    if(result[1] === false){
-        playableRace.faction_id = faction.id
-    }
-
-    Object.assign(playableRace, getName(playableRaceData.name))
-
-    await playableRace.save()
 }

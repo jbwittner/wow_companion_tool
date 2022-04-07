@@ -2,12 +2,12 @@ import { DataTypes } from "sequelize";
 import { sequelizeInstance } from "../config/SequelizeConfig"
 import { initLocalizedData, LocalizedData } from "./LocalizedType";
 
-export class RealmType extends LocalizedData {
+export class SpecializationRole extends LocalizedData {
     declare id: number
     declare type: string
 }
 
-RealmType.init({
+SpecializationRole.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -15,5 +15,5 @@ RealmType.init({
       },
     type: DataTypes.STRING,
     ...initLocalizedData
-  }, { sequelize: sequelizeInstance, tableName: 'REALM_TYPE', timestamps: false});
+  }, { sequelize: sequelizeInstance, tableName: 'SPECIALIZATION_ROLES', timestamps: false});
  

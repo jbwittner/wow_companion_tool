@@ -1,8 +1,8 @@
 import { Configuration, RealmApi, RealmData } from "@jbwittner/blizzardswagger_wow-retail-api_typescript-axios";
-import { getName } from ".";
-import { Realm } from "./models/Realm";
-import { RealmCategory } from "./models/RealmCategory";
-import { RealmType } from "./models/RealmType";
+import { Realm } from "../models/Realm";
+import { RealmCategory } from "../models/RealmCategory";
+import { RealmType } from "../models/RealmType";
+import { getName } from "../updateStaticData";
 
 export const updateRealms = async (configuration:Configuration) => {
     console.log("REALMS : Start update realms")
@@ -59,7 +59,7 @@ const createOrUpdateRealmType = async (realmData: RealmData) => {
 
     const count = await RealmType.findAndCountAll()
 
-    const result = await RealmType.findOrCreate({
+    const [realmType] = await RealmType.findOrCreate({
         where : {
             type: typeData.type
         },
@@ -67,8 +67,6 @@ const createOrUpdateRealmType = async (realmData: RealmData) => {
             id: (count.count + 1)
         }
     })
-
-    const realmType = result[0]
 
     Object.assign(realmType, getName(typeData.name))
 
@@ -84,7 +82,7 @@ const createOrUpdateRealmCategory = async (realmData: RealmData) => {
 
     const count = await RealmCategory.findAndCountAll()
 
-    const result = await RealmCategory.findOrCreate({
+    const [realmCategory] = await RealmCategory.findOrCreate({
         where : {
             slug: categoryData.en_US
         },
@@ -92,8 +90,6 @@ const createOrUpdateRealmCategory = async (realmData: RealmData) => {
             id: (count.count + 1)
         }
     })
-
-    const realmCategory = result[0]
 
     Object.assign(realmCategory, getName(categoryData))
 
@@ -105,7 +101,7 @@ const createOrUpdateRealmCategory = async (realmData: RealmData) => {
 
 const createOrUpdateRealm = async (realmData: RealmData, realmCategory: RealmCategory, realmType: RealmType) => {
 
-    const result = await Realm.findOrCreate({
+    const [realm] = await Realm.findOrCreate({
         where : {
             id: realmData.id
         },
@@ -118,15 +114,11 @@ const createOrUpdateRealm = async (realmData: RealmData, realmCategory: RealmCat
         }
     })
 
-    const realm = result[0]
-
-    if(result[1] === false){
-        realm.locale = realmData.locale
-        realm.realm_category_id = realmCategory.id
-        realm.realm_type_id = realmType.id
-        realm.timezone = realmData.timezone
-        realm.slug = realmData.slug
-    }
+    realm.locale = realmData.locale
+    realm.realm_category_id = realmCategory.id
+    realm.realm_type_id = realmType.id
+    realm.timezone = realmData.timezone
+    realm.slug = realmData.slug
 
     Object.assign(realm, getName(realmData.name))
 
