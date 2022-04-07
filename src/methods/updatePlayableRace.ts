@@ -88,8 +88,6 @@ const createOrUpdateFaction = async (playableRaceData: PlayableRaceData) => {
 
 const createOrUpdatePlayableRace = async (playableRaceData: PlayableRaceData, faction: Faction) => {
 
-    const count = await Faction.findAndCountAll()
-
     const [playableRace] = await PlayableRace.findOrCreate({
         where : {
             id: playableRaceData.id

@@ -64,13 +64,13 @@ async function updateData() {
     ])
 }
 
-console.time("UPDATA_DATA")
+console.time("UPDATE_DATA")
 updateData().then(() => {
     console.log("END OK")
 }).catch((error) => {
     console.error(error)
     console.log("END KO")
 }).finally(() => {
-    console.timeEnd("UPDATA_DATA")
+    console.timeEnd("UPDATE_DATA")
     console.log("finally")
 })
