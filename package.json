@@ -2,11 +2,11 @@
   "name": "wow_companion_tool",
   "version": "0.1.0",
   "description": "Tool for WoW Companion application",
-  "main": "dist/index.js",
+  "main": "dist/updateStaticData.js",
   "scripts": {
     "build": "npm run clean && tsc",
     "clean": "rimraf dist",
-    "start": "node dist/index.js",
+    "start": "node dist/updateStaticData.js",
     "restart": "npm run build && npm run start"
   },
   "repository": {

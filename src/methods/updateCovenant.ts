@@ -4,16 +4,17 @@ import { Covenant } from "../models/Covenant";
 
 export const updateCovenant = async (configuration:Configuration) => {
     console.log("COVENANT : Start update")
+    console.time("COVENANT")
 
     const covenantApi : CovenantApi = new CovenantApi(configuration);
 
     console.log("COVENANT : Start getCovenantIndex")
 
-    const covenantIndexResult = await covenantApi.getCovenantIndex("static-eu","eu")
+    const covenantIndexResult = await getCovenantIndex(covenantApi)
 
     console.log("COVENANT : End getCovenantIndex")
 
-    const covenantsIndexData = covenantIndexResult.data.covenants
+    const covenantsIndexData = covenantIndexResult.covenants
 
     if(covenantsIndexData === undefined){
         throw "Error covenant data"
@@ -25,7 +26,19 @@ export const updateCovenant = async (configuration:Configuration) => {
         await createOrUpdateCovenant(covenantData, covenantApi)
     }
     
+    console.timeEnd("COVENANT")
     console.log("COVENANT : End save data")
+}
+
+const getCovenantIndex = async (covenantApi: CovenantApi) => {
+    while(true){
+        try {
+            const data = await covenantApi.getCovenantIndex("static-eu","eu")
+            return (data.data);
+        } catch (error) {
+            //console.log("Error get realm : " + slug)
+        }
+    }
 }
 
 const getCovenantMediaData = async (id: number, covenantApi: CovenantApi) => {

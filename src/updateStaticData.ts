@@ -28,7 +28,7 @@ const grantType = {
     grant_type: 'client_credentials',
   };
 
-async function updateDate() {
+async function updateData() {
     const getTokenResult = await axios.request({
         url: '/oauth/token',
         method: 'post',
@@ -49,20 +49,28 @@ async function updateDate() {
         }
     });
 
-    updateRealms(configuration)
-    updatePlayableRace(configuration)
-    updatePlayableClass(configuration).then(() => {
-        updatePlayableSpecialization(configuration)
+    const promiseRealm = updateRealms(configuration)
+    const promisePlayableRace = updatePlayableRace(configuration)
+    const promisePlayableSpecialization = updatePlayableClass(configuration).then(() => {
+        return updatePlayableSpecialization(configuration)
     })
-    updatePlayableSpecialization(configuration)
-    updateCovenant(configuration)
+    const promiseCovenant = updateCovenant(configuration)
+
+    return Promise.all([
+        promiseRealm,
+        promisePlayableRace,
+        promisePlayableSpecialization,
+        promiseCovenant
+    ])
 }
 
-updateDate().then(() => {
+console.time("UPDATA_DATA")
+updateData().then(() => {
     console.log("END OK")
 }).catch((error) => {
     console.error(error)
     console.log("END KO")
 }).finally(() => {
+    console.timeEnd("UPDATA_DATA")
     console.log("finally")
 })

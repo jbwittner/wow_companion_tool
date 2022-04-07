@@ -4,16 +4,17 @@ import { getName } from "../updateStaticData";
 
 export const updatePlayableRace = async (configuration:Configuration) => {
     console.log("PLAYABLE_RACE : Start update")
+    console.time("PLAYABLE_RACE")
 
     const playableRaceApi : PlayableRaceApi = new PlayableRaceApi(configuration);
 
     console.log("PLAYABLE_RACE : Start getPlayableRaceIndex")
 
-    const playableRaceIndexResult = await playableRaceApi.getPlayableRaceIndex("static-eu","eu")
+    const playableRaceIndexResult = await getPlayableRaceIndex(playableRaceApi)
 
     console.log("PLAYABLE_RACE : End getPlayableRaceIndex")
 
-    const playableRacesIndexData = playableRaceIndexResult.data.races
+    const playableRacesIndexData = playableRaceIndexResult.races
 
     const promisePlayableRaceDataArray : Promise<PlayableRaceData>[] = [];
 
@@ -34,6 +35,7 @@ export const updatePlayableRace = async (configuration:Configuration) => {
         await createOrUpdatePlayableRace(playableRaceData)
     }
 
+    console.timeEnd("PLAYABLE_RACE")
     console.log("PLAYABLE_RACE : End save data")
 }
 
@@ -41,6 +43,17 @@ const getPlayableRaceData = async (id: number, playableRaceApi: PlayableRaceApi)
     while(true){
         try {
             const data = await playableRaceApi.getPlayableRaceById("static-eu","eu", id)
+            return (data.data);
+        } catch (error) {
+            //console.log("Error get realm : " + slug)
+        }
+    }
+}
+
+const getPlayableRaceIndex = async (playableRaceApi: PlayableRaceApi) => {
+    while(true){
+        try {
+            const data = await playableRaceApi.getPlayableRaceIndex("static-eu","eu")
             return (data.data);
         } catch (error) {
             //console.log("Error get realm : " + slug)

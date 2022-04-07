@@ -6,16 +6,17 @@ import { getName } from "../updateStaticData";
 
 export const updateRealms = async (configuration:Configuration) => {
     console.log("REALMS : Start update realms")
+    console.time("REALMS")
 
     const realmApi : RealmApi = new RealmApi(configuration);
 
     console.log("REALMS : Start getRealmIndex")
 
-    const realmIndexResult = await realmApi.getRealmIndex("dynamic-eu","eu")
+    const realmIndexResult = await getRealmIndexData(realmApi)
 
     console.log("REALMS : End getRealmIndex")
 
-    const realmsIndexData = realmIndexResult.data.realms
+    const realmsIndexData = realmIndexResult.realms
 
     const promiseRealmDataArray : Promise<RealmData>[] = [];
 
@@ -39,7 +40,19 @@ export const updateRealms = async (configuration:Configuration) => {
         await createOrUpdateRealm(realmData,result[1],result[0])
     }
 
+    console.timeEnd("REALMS")
     console.log("REALMS : End save data")
+}
+
+const getRealmIndexData = async (realmApi: RealmApi) => {
+    while(true){
+        try {
+            const data = await realmApi.getRealmIndex("dynamic-eu","eu")
+            return (data.data);
+        } catch (error) {
+            //console.log("Error get realm : " + slug)
+        }
+    }
 }
 
 const getRealmData = async (slug: string, realmApi: RealmApi) => {

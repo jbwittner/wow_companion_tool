@@ -4,16 +4,17 @@ import { getName } from "../updateStaticData";
 
 export const updatePlayableClass = async (configuration:Configuration) => {
     console.log("PLAYABLE_CLASS : Start update")
+    console.time("PLAYABLE_CLASS")
 
     const playableClassApi : PlayableClassApi = new PlayableClassApi(configuration);
 
     console.log("PLAYABLE_CLASS : Start getPlayableClassIndex")
 
-    const playableClassIndexResult = await playableClassApi.getPlayableClassIndex("static-eu","eu")
+    const playableClassIndexResult = await getPlayableClassIndexData(playableClassApi)
 
     console.log("PLAYABLE_CLASS : End getPlayableClassIndex")
 
-    const playableClasssIndexData = playableClassIndexResult.data.classes
+    const playableClasssIndexData = playableClassIndexResult.classes
 
     const promiseplayableClassDataArray : Promise<PlayableClassData>[] = [];
 
@@ -34,7 +35,19 @@ export const updatePlayableClass = async (configuration:Configuration) => {
         await createOrUpdatePlayableClass(playableClassData, playableClassApi)
     }
     
+    console.timeEnd("PLAYABLE_CLASS")
     console.log("PLAYABLE_CLASS : End save data")
+}
+
+const getPlayableClassIndexData = async (playableClassApi: PlayableClassApi) => {
+    while(true){
+        try {
+            const data = await playableClassApi.getPlayableClassIndex("static-eu","eu")
+            return (data.data);
+        } catch (error) {
+            //console.log("Error get realm : " + slug)
+        }
+    }
 }
 
 const getPlayableClassData = async (id: number, playableClassApi: PlayableClassApi) => {

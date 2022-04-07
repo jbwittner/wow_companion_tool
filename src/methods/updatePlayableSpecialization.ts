@@ -6,16 +6,17 @@ import { getName } from "../updateStaticData";
 
 export const updatePlayableSpecialization = async (configuration:Configuration) => {
     console.log("PLAYABLE_SPECIALIZATION : Start update")
+    console.time("PLAYABLE_SPECIALIZATION")
 
     const playableSpecializationApi : PlayableSpecializationApi = new PlayableSpecializationApi(configuration);
 
     console.log("PLAYABLE_SPECIALIZATION : Start getPlayableSpecializationIndex")
 
-    const playableSpecializationIndexResult = await playableSpecializationApi.getPlayableSpecializationIndex("static-eu","eu")
+    const playableSpecializationIndexResult = await getPlayableSpecializationIndexData(playableSpecializationApi)
 
     console.log("PLAYABLE_SPECIALIZATION : End getPlayableSpecializationIndex")
 
-    const playableSpecializationsIndexData = playableSpecializationIndexResult.data.character_specializations
+    const playableSpecializationsIndexData = playableSpecializationIndexResult.character_specializations
 
     const promiseplayableSpecializationDataArray : Promise<PlayableSpecializationData>[] = [];
 
@@ -38,7 +39,20 @@ export const updatePlayableSpecialization = async (configuration:Configuration) 
         await createOrUpdatePlayableSpecialization(playableSpecializationData, specializationRole, playableSpecializationApi)
     }
     
+    console.timeEnd("PLAYABLE_SPECIALIZATION")
     console.log("PLAYABLE_SPECIALIZATION : End save data")
+
+}
+
+const getPlayableSpecializationIndexData = async (playableSpecializationApi: PlayableSpecializationApi) => {
+    while(true){
+        try {
+            const data = await playableSpecializationApi.getPlayableSpecializationIndex("static-eu","eu")
+            return (data.data);
+        } catch (error) {
+            //console.log("Error get realm : " + slug)
+        }
+    }
 }
 
 const getPlayableSpecializationData = async (id: number, playableSpecializationApi: PlayableSpecializationApi) => {
